@@ -1,0 +1,46 @@
+{
+    "name": "@rws-framework/components",
+    "private": false,
+    "version": "0.0.1",
+    "main": "src/index.ts",
+    "scripts": {
+        "docs": "typedoc --tsconfig ./tsconfig.json"
+    },
+    "bin": {
+        "rws-client": "./console.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/rws-framework/components.git"
+    },
+    "keywords": [
+        "frontend",
+        "rws",
+        "client",
+        "typescript"
+    ],
+    "author": "papablack",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/rws-framework/components/issues"
+    },
+    "homepage": "https://github.com/rws-framework/components#readme",
+    "dependencies": {
+        "@rws-framework/client": "*",
+        "@shoelace-style/shoelace": "^2.19.1"
+    },
+    "devDependencies": {
+        "ts-node": "^10.9.1",
+        "ts-transformer-keys": "^0.4.4",
+        "tsc-watch": "^6.0.4",
+        "tsconfig-paths": "^4.2.0",
+        "tsconfig-paths-webpack-plugin": "^4.1.0"
+    },
+    "resolutions": {
+        "lodash": "^4.17.21"
+    },
+    "overrides": {
+        "lodash": "^4.17.21"
+    },
+    "_rws": true
+}
