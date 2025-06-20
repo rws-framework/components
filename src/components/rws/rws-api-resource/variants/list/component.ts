@@ -1,15 +1,14 @@
-import { RWSViewComponent} from '../../../../_component';
-import { RWSView} from '../../../../_decorator';
+import { RWSViewComponent, RWSView } from '@rws-framework/client';
 import { observable, attr } from '@microsoft/fast-element';
 import { ActionType, IExtraColumnFormatter, IFlexTableColumn } from '../../../rws-table/component';
-import { IKDBTypeInfo, IKDBTypesResponse } from '../../../../../types/IBackendCore';
+import { ITypeInfo, ITypesResponse } from '../../../../../types/IBackendCore';
 
 @RWSView('rws-resource-list')
 class RWSResourceListComponent extends RWSViewComponent {
     @attr resource: string;         
     @attr emptyLabel: string = 'No records';
 
-    @observable dbModelData: IKDBTypesResponse = null;
+    @observable dbModelData: ITypesResponse = null;
     @observable resourceList: any[] = [];
     @observable columns: IFlexTableColumn[] = [];
 
@@ -25,7 +24,7 @@ class RWSResourceListComponent extends RWSViewComponent {
         const makeColumns: IFlexTableColumn[] = [];
 
         for(const key in Object.keys(this.dbModelData.data.types)){
-            const responseObject: IKDBTypeInfo = this.dbModelData.data.types[key];
+            const responseObject: ITypeInfo = this.dbModelData.data.types[key];
 
             makeColumns.push({
                 key: responseObject.fieldName,

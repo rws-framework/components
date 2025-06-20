@@ -1,6 +1,5 @@
 import { observable, attr } from '@microsoft/fast-element';
-import { RWSViewComponent} from '../../_component';
-import { RWSView} from '../../_decorator';
+import { RWSViewComponent, RWSView } from '@rws-framework/client';
 
 export interface IFlexTableColumn {
     key: string;

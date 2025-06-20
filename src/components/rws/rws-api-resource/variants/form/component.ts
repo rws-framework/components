@@ -1,7 +1,6 @@
 import { attr, observable } from '@microsoft/fast-element';
-import { IKDBTypesResponse } from '../../../../../types/IBackendCore';
-import { RWSViewComponent} from '../../../../_component';
-import { RWSView} from '../../../../_decorator';
+import { ITypesResponse } from '../../../../../types/IBackendCore';
+import { RWSViewComponent, RWSView } from '@rws-framework/client';
 import { IReFormerMassOrdering } from '../../../reformer/types/IReFormerTypes';
 
 
@@ -9,7 +8,7 @@ import { IReFormerMassOrdering } from '../../../reformer/types/IReFormerTypes';
 class RWSResourceFormComponent extends RWSViewComponent {
     @attr resource: string;             
     
-    @observable dbModelData: IKDBTypesResponse = null;
+    @observable dbModelData: ITypesResponse = null;
     @observable formOrdering: IReFormerMassOrdering = [];
     @observable back: (resource: any) => Promise<void>;
 

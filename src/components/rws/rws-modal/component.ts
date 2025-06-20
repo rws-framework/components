@@ -1,6 +1,5 @@
 import { observable } from '@microsoft/fast-element';
-import { RWSViewComponent} from '../../_component';
-import { RWSView} from '../../_decorator';
+import { RWSViewComponent, RWSView } from '@rws-framework/client';
 
 @RWSView('rws-modal')
 class RWSModal extends RWSViewComponent {      

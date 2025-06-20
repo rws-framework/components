@@ -1,5 +1,5 @@
-import { RWSViewComponent } from '../../../components/_component';
-import { RWSView } from '../../../components/_decorator';
+import { RWSViewComponent, RWSView } from '@rws-framework/client';
+
 import { observable, attr } from '@microsoft/fast-element';
 
 import { ViewTemplate } from '@microsoft/fast-element';

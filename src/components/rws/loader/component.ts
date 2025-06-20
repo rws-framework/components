@@ -1,5 +1,4 @@
-import { RWSView } from '../../_decorator';
-import { RWSViewComponent } from '../../_component';
+import { RWSViewComponent, RWSView } from '@rws-framework/client';
 import { attr } from '@microsoft/fast-element';
 
 @RWSView('rws-loader')

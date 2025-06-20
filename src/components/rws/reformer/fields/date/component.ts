@@ -1,5 +1,4 @@
-import RWSViewComponent from '../../../../_component';
-import { RWSView} from '../../../../_decorator';
+import { RWSViewComponent, RWSView } from '@rws-framework/client';
 import { attr, observable } from '@microsoft/fast-element';
 
 @RWSView('reformer-date')

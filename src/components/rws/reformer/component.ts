@@ -1,7 +1,6 @@
 import { observable, attr } from '@microsoft/fast-element';
-import { IKDBTypeInfo, IKDBTypesResponse } from '../../../types/IBackendCore';
-import { RWSViewComponent} from '../../_component';
-import { RWSView} from '../../_decorator';
+import { ITypeInfo, ITypesResponse } from '../../../types/IBackendCore';
+import { RWSViewComponent, RWSView } from '@rws-framework/client';
 import { ReFormerText } from './fields/text/component';
 import { ReFormerDate } from './fields/date/component';
 import { ReFormerNumber } from './fields/number/component';
@@ -17,15 +16,15 @@ class ReFormer extends RWSViewComponent {
     @attr resource: string;  
 
     @observable fields: string[] | null = null;
-    @observable formFields: IKDBTypeInfo[];
+    @observable formFields: ITypeInfo[];
 
-    @observable modelTypes: IKDBTypesResponse;
+    @observable modelTypes: ITypesResponse;
     @observable setForm: (key: string, val: any) => void = this.setFormField.bind(this);
     @observable afterForm: (val: any) => Promise<void> = null;
 
     private payload: {[key: string]: any} = {};
 
-    modelTypesChanged(oldVal:IKDBTypesResponse, newVal: IKDBTypesResponse)
+    modelTypesChanged(oldVal:ITypesResponse, newVal: ITypesResponse)
     {
         if(newVal){
             this.formFields = newVal.data.types.filter((item) => !['id', 'created_at', 'updated_at'].includes(item.fieldName))

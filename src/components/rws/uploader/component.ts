@@ -1,18 +1,17 @@
 import { observable, attr } from '@microsoft/fast-element';
-import { RWSView } from '../../_decorator';
-import { RWSViewComponent } from '../../_component';
+import { RWSViewComponent, RWSView } from '@rws-framework/client';
 
 @RWSView('rws-uploader')
 class RWSUploader extends RWSViewComponent {
 
   @observable uploadProgress: number;
 
-  @observable uploadedFile: File;
-  @observable chosenFile: File;
+  @observable uploadedFile: File | null = null;
+  @observable chosenFile: File | null = null;
   @observable uploadParams: any;
 
   @attr onFinish: (uploadResponse: any) => void;
-  @attr onStart: (chosenFile: File, context: any) => Promise<unknown> = async (chosenFile: File) => chosenFile;
+  @attr onStart: (chosenFile: File | null, context: any) => Promise<unknown> = async (chosenFile: File) => chosenFile;
   @attr onProgress: (progress: number) => void = (progress: number) => null;
 
 
@@ -42,11 +41,13 @@ class RWSUploader extends RWSViewComponent {
       this.triggerUpload(fileInput);
 
       fileInput.addEventListener('change', () => {
+        if(fileInput.files?.length){
           _self.chosenFile = fileInput.files[0]; 
           
           _self.uploadedFile = null;
 
           _self.removeFileInput(fileInput);      
+        }          
       });
   }
 
@@ -61,7 +62,7 @@ class RWSUploader extends RWSViewComponent {
       fileInput.style.display = 'none';
 
 
-      this.shadowRoot.appendChild(fileInput);
+      this.shadowRoot?.appendChild(fileInput);
       return fileInput;
   }
 
@@ -72,7 +73,7 @@ class RWSUploader extends RWSViewComponent {
 
   private removeFileInput(fileInput: HTMLInputElement): void
   {
-      this.shadowRoot.removeChild(fileInput);
+      this.shadowRoot?.removeChild(fileInput);
   }
 
   uploadProgressChanged(oldV: any, newV: any)
