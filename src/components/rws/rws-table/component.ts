@@ -35,6 +35,10 @@ export class RWSTable extends RWSViewComponent {
     @observable extraFormatters: { [header_key: string]: IExtraColumnFormatter } = {};
     @observable headerTranslations: { [sourceKey: string]: string } = {};
 
+    @attr exportLabel: string = 'Export';
+    @attr exportIcon: string = 'simple-icon-cloud-download';
+    @attr columnsLabel: string = 'Columns';
+    @attr columnsIcon: string = 'simple-icon-settings';
 
     private static readonly displayManager: DisplayManager = new DisplayManager(RWSTable);
 
@@ -43,6 +47,9 @@ export class RWSTable extends RWSViewComponent {
     }
 
     connectedCallback(): void {
+        super.connectedCallback();
+
+
         if (!this.fields || !this.fields.length) {
             this.fields = this.columns.map(col => col.key);
         }
@@ -52,8 +59,7 @@ export class RWSTable extends RWSViewComponent {
             this.exportToCSV();
         });
 
-        this.orderFields();
-        super.connectedCallback();
+        this.orderFields();        
     }
 
     displayClass(key: string): string {

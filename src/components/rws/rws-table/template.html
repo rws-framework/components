@@ -1,12 +1,15 @@
 <div class="card">
   <div class="card-body">
     <table-controls
+      :columnsLabel="${x => x.columnsLabel}"
+      :columnsIcon="${x => x.columnsIcon}"  
+      :exportLabel="${x => x.exportLabel}"
+      :exportIcon="${x => x.exportIcon}"
       :availableColumns="${x => x.columns}"
       :visibleColumns="${x => x.fields || []}"
       :data="${x => x.data}"       
       @column-visibility-changed="${(x, c) => x.handleColumnVisibilityChanged(c.event)}">
-    </table-controls>
-    ${x => console.log('xx', x.actions)}
+    </table-controls>    
     <table class="${x => x.displayClass('table')}">
       <thead class="${x => x.displayClass('thead')}">
         <tr class="${x => x.displayClass('tr')}">

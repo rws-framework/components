@@ -22,7 +22,7 @@
           class="btn btn-sm btn-secondary dropdown-toggle"
           type="button">
           <i class="simple-icon-settings"></i>
-          Columns
+          ${x => x.columnsLabel}
         </button>
         
         ${T.when(x => x.showColumnsDropdown, T.html`

@@ -30,6 +30,11 @@ class TableControls extends RWSViewComponent {
 
     @attr showRefresh: 'true' | 'false' = 'false';
 
+    @attr exportLabel: string = 'Export';
+    @attr exportIcon: string = 'simple-icon-cloud-download';
+    @attr columnsLabel: string = 'Columns';
+    @attr columnsIcon: string = 'simple-icon-settings';
+
     connectedCallback(): void {
         super.connectedCallback();
         
@@ -88,8 +93,8 @@ class TableControls extends RWSViewComponent {
 
         actions.push( {
                 key: 'export',
-                label: 'Export',
-                icon: 'simple-icon-cloud-download',
+                label: this.exportLabel,
+                icon: this.exportIcon,
                 variant: 'primary',
                 action: () => this.handleExport()
         });
