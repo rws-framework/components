@@ -10,7 +10,7 @@ export class DisplayManager {
         th: [],
         td: [],
         actionsTh: [],
-        actionsTd: ["text-right"],
+        actionsTd: ["action-cell"],
         card: ["card", "card-body"],
         alert: ["alert", "alert-info"],
         button: ["btn", "btn-sm"],

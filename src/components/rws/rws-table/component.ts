@@ -1,5 +1,6 @@
 import { RWSViewComponent, RWSView, observable, attr } from '@rws-framework/client';
 import { DisplayManager } from './display/displayManager';
+import { TableControlsEvents } from '../table-controls/events';
 
 export interface IFlexTableColumn {
     key: string;
@@ -13,12 +14,14 @@ export type ActionType = {
     key: string,
     label: string,
     variant: string,
+    icon?: string,
     handler: (id: string) => Promise<void>
 }
  
 @RWSView('rws-table', { debugPackaging: false })
-class RWSTable extends RWSViewComponent {     
+export class RWSTable extends RWSViewComponent {     
     @attr emptyLabel: string = 'No records'; 
+    @attr exportName: string = 'data_export'; 
     @observable columns: IFlexTableColumn[] = [];
 
     @observable dataColumns: IFlexTableColumn[] = [];
@@ -31,23 +34,27 @@ class RWSTable extends RWSViewComponent {
 
     @observable extraFormatters: {[header_key: string] : IExtraColumnFormatter} = {};    
     @observable headerTranslations: { [sourceKey: string]: string } = {};
+    
 
     private static readonly displayManager: DisplayManager = new DisplayManager(RWSTable);
 
     static display(): DisplayManager
     {
         return this.displayManager;
-    }
+    }     
 
-    connectedCallback(): void {
-        super.connectedCallback();
-        if(!this.fields || !this.fields.length){
+    connectedCallback(): void {                
+        if(!this.fields || !this.fields.length){            
             this.fields = this.columns.map(col => col.key);
         }
 
-        console.debug('RWSTable connectedCallback', this.fields, this.columns);
+            
+        this.on(TableControlsEvents.TABLE_EXPORT, () => {
+            this.exportToCSV();        
+        });
 
-        this.orderFields();
+        this.orderFields();    
+        super.connectedCallback();
     }
 
     displayClass(key: string): string{
@@ -67,6 +74,37 @@ class RWSTable extends RWSViewComponent {
     columnsChanged(oldValue: IFlexTableColumn[], newValue: IFlexTableColumn[])
     {        
         this.orderFields();
+    }
+
+    exportToCSV(): void {
+        const headers = this.columns.map(col => col.header);
+        let csvContent = headers.join(',') + '\n';
+
+        this.data.forEach(item => {
+            const row = this.columns.map(col => {
+                const value = item[col.key];
+                if (col.formatter && typeof col.formatter === 'function') {
+                    // Strip HTML tags from formatted content for CSV
+                    const formatted = col.formatter(value);
+                    return `"${formatted.replace(/<[^>]*>/g, '').replace(/"/g, '""')}"`;
+                }
+                return `"${(value || '').toString().replace(/"/g, '""')}"`;
+            });
+            csvContent += row.join(',') + '\n';
+        });
+
+        // Create and download CSV file
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `${this.exportName}_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     }
 
     orderFields(): void
@@ -94,18 +132,6 @@ class RWSTable extends RWSViewComponent {
         }
     }
 
-    handleTableRefresh(event: CustomEvent): void {
-        this.$emit('table-refresh', event.detail);
-    }
-
-    handleTableExport(event: CustomEvent): void {
-        this.$emit('table-export', { 
-            ...event.detail,
-            data: this.data,
-            columns: this.dataColumns 
-        });
-    }
-
     handleColumnVisibilityChanged(event: CustomEvent): void {
         const { visibleColumns } = event.detail;
         if (visibleColumns && Array.isArray(visibleColumns)) {
@@ -116,5 +142,3 @@ class RWSTable extends RWSViewComponent {
 }
 
 RWSTable.defineComponent();
-
-export { RWSTable };

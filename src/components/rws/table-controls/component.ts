@@ -17,8 +17,7 @@ export interface TableControlAction {
 }
 
 @RWSView('table-controls')
-class TableControls extends RWSViewComponent {
-    @observable tableTarget?: string;
+class TableControls extends RWSViewComponent {    
     @observable actions: TableControlAction[] = [];
     @observable showColumnToggle: boolean = true;
     @observable availableColumns: IFlexTableColumn[] = [];
@@ -28,6 +27,8 @@ class TableControls extends RWSViewComponent {
     // State for dropdown visibility
     @observable showActionsDropdown: boolean = false;
     @observable showColumnsDropdown: boolean = false;
+
+    @attr showRefresh: 'true' | 'false' = 'false';
 
     connectedCallback(): void {
         super.connectedCallback();
@@ -68,50 +69,48 @@ class TableControls extends RWSViewComponent {
             }
             if (parentTable.visibleColumns) {
                 this.setVisibleColumns(parentTable.visibleColumns);
-            }
-            
-            // Store reference to parent table
-            this.tableTarget = 'crud-table';
+            }                    
         }
     }
 
     private setupDefaultActions(): void {
-        this.actions = [
-            {
+        const actions: TableControlAction[]  = [];
+
+        if(this.showRefresh === 'true') {
+            actions.push({
                 key: 'refresh',
                 label: 'Refresh',
                 icon: 'simple-icon-refresh',
                 variant: 'secondary',
                 action: () => this.handleRefresh()
-            },
-            {
+            });
+        }        
+
+        actions.push( {
                 key: 'export',
                 label: 'Export',
                 icon: 'simple-icon-cloud-download',
                 variant: 'primary',
                 action: () => this.handleExport()
-            },
-            {
-                key: 'settings',
-                label: 'Table Settings',
-                icon: 'simple-icon-settings',
-                variant: 'secondary',
-                action: () => this.toggleColumnsDropdown()
-            }
-        ];
+        });
+
+        actions.push({
+            key: 'settings',
+            label: 'Table Settings',
+            icon: 'simple-icon-settings',
+            variant: 'secondary',
+            action: () => this.toggleColumnsDropdown()
+        });    
+
+        this.actions = actions;
     }
 
-    private handleRefresh(): void {
-        const eventDetail: TableRefreshEventDetail = { target: this.tableTarget };
-        this.$emit(TableControlsEvents.TABLE_REFRESH, eventDetail);
+    handleRefresh(): void {                
+        this.$emit(TableControlsEvents.TABLE_REFRESH);
     }
 
-    private handleExport(): void {
-        const eventDetail: TableExportEventDetail = { 
-            target: this.tableTarget,
-            columns: this.visibleColumns 
-        };
-        this.$emit(TableControlsEvents.TABLE_EXPORT, eventDetail);
+    handleExport(): void {
+        this.$emit(TableControlsEvents.TABLE_EXPORT);
     }
 
     private toggleActionsDropdown(): void {
@@ -138,8 +137,7 @@ class TableControls extends RWSViewComponent {
         }
 
         // Emit the change event
-        const eventDetail: ColumnVisibilityChangedEventDetail = {
-            target: this.tableTarget,
+        const eventDetail: ColumnVisibilityChangedEventDetail = {            
             visibleColumns: [...this.visibleColumns]
         };
         this.$emit(TableControlsEvents.COLUMN_VISIBILITY_CHANGED, eventDetail);

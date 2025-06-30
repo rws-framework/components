@@ -71,3 +71,12 @@
   }
 }
 
+th.hidden, td.hidden {
+  display: none;
+}
+
+td {
+  &.action-cell{
+    text-align: center;
+  }
+}
