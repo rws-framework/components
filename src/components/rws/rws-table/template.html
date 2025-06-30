@@ -6,12 +6,11 @@
       :data="${x => x.data}"       
       @column-visibility-changed="${(x, c) => x.handleColumnVisibilityChanged(c.event)}">
     </table-controls>
-    
+    ${x => console.log('xx', x.actions)}
     <table class="${x => x.displayClass('table')}">
       <thead class="${x => x.displayClass('thead')}">
         <tr class="${x => x.displayClass('tr')}">
           ${T.repeat(x => x.dataColumns, T.html`<th class="${(x, c) => c.parent.displayClass('th')}">${x => x.header}</th>`) }
-          
           <th class="${x => x.displayClass('actionsTh')}${(x, c) => x.actions.length ? '' : ' hidden'}">Actions</th>
         </tr>
       </thead>
