@@ -17,11 +17,11 @@ export type ActionType = {
     icon?: string,
     handler: (id: string) => Promise<void>
 }
- 
+
 @RWSView('rws-table', { debugPackaging: false })
-export class RWSTable extends RWSViewComponent {     
-    @attr emptyLabel: string = 'No records'; 
-    @attr exportName: string = 'data_export'; 
+export class RWSTable extends RWSViewComponent {
+    @attr emptyLabel: string = 'No records';
+    @attr exportName: string = 'data_export';
     @observable columns: IFlexTableColumn[] = [];
 
     @observable dataColumns: IFlexTableColumn[] = [];
@@ -32,47 +32,43 @@ export class RWSTable extends RWSViewComponent {
 
     @observable actionFilter: (action: ActionType, row: any) => boolean = (action: ActionType, row: any) => true;
 
-    @observable extraFormatters: {[header_key: string] : IExtraColumnFormatter} = {};    
+    @observable extraFormatters: { [header_key: string]: IExtraColumnFormatter } = {};
     @observable headerTranslations: { [sourceKey: string]: string } = {};
-    
+
 
     private static readonly displayManager: DisplayManager = new DisplayManager(RWSTable);
 
-    static display(): DisplayManager
-    {
+    static display(): DisplayManager {
         return this.displayManager;
-    }     
+    }
 
-    connectedCallback(): void {                
-        if(!this.fields || !this.fields.length){            
+    connectedCallback(): void {
+        if (!this.fields || !this.fields.length) {
             this.fields = this.columns.map(col => col.key);
         }
 
-            
+
         this.on(TableControlsEvents.TABLE_EXPORT, () => {
-            this.exportToCSV();        
+            this.exportToCSV();
         });
 
-        this.orderFields();    
+        this.orderFields();
         super.connectedCallback();
     }
 
-    displayClass(key: string): string{
+    displayClass(key: string): string {
         return (this.constructor as typeof RWSTable).display().getClass(key);
     }
 
-    headerTranslationsChanged(oldValue: { [sourceKey: string]: string }, newValue: { [sourceKey: string]: string })
-    {
+    headerTranslationsChanged(oldValue: { [sourceKey: string]: string }, newValue: { [sourceKey: string]: string }) {
         this.orderFields();
     }
 
-    fieldsChanged(oldValue: string[], newValue: string[])
-    {
+    fieldsChanged(oldValue: string[], newValue: string[]) {
         this.orderFields();
     }
-    
-    columnsChanged(oldValue: IFlexTableColumn[], newValue: IFlexTableColumn[])
-    {        
+
+    columnsChanged(oldValue: IFlexTableColumn[], newValue: IFlexTableColumn[]) {
         this.orderFields();
     }
 
@@ -107,35 +103,39 @@ export class RWSTable extends RWSViewComponent {
         }
     }
 
-    orderFields(): void
-    {
-        if(this.columns && this.columns.length){            
-            const orderedColumns: IFlexTableColumn[] = [];            
+    orderFields(): void {
+        if (this.columns && this.columns.length) {
+            const orderedColumns: IFlexTableColumn[] = [];
 
-            for(const fieldKey of this.fields){
+            for (const fieldKey of this.fields) {
                 const found = this.columns.find(item => item.key === fieldKey);
 
-                if(found){
-                    if(Object.keys(this.extraFormatters).includes(fieldKey)){
+                if (found) {
+                    if (Object.keys(this.extraFormatters).includes(fieldKey)) {
                         found.formatter = this.extraFormatters[fieldKey];
                     }
 
-                    if(this.headerTranslations && Object.keys(this.headerTranslations).includes(fieldKey)){
+                    if (this.headerTranslations && Object.keys(this.headerTranslations).includes(fieldKey)) {
                         found.header = this.headerTranslations[fieldKey];
                     }
 
                     orderedColumns.push(found);
-                }                
-            }                        
+                }
+            }
 
-            this.dataColumns = orderedColumns;            
+            this.dataColumns = orderedColumns;
         }
     }
 
     handleColumnVisibilityChanged(event: CustomEvent): void {
         const { visibleColumns } = event.detail;
         if (visibleColumns && Array.isArray(visibleColumns)) {
-            this.fields = visibleColumns;
+            // Preserve original column order by filtering columns array instead of using visibleColumns directly
+            const orderedVisibleFields = this.columns
+                .map(col => col.key)
+                .filter(key => visibleColumns.includes(key));
+
+            this.fields = orderedVisibleFields;
             this.$emit('column-visibility-changed', event.detail);
         }
     }
