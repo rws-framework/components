@@ -1,5 +1,5 @@
-import { observable, attr } from '@microsoft/fast-element';
-import { RWSViewComponent, RWSView } from '@rws-framework/client';
+import { RWSViewComponent, RWSView, observable, attr } from '@rws-framework/client';
+import { DisplayManager } from './display/displayManager';
 
 export interface IFlexTableColumn {
     key: string;
@@ -16,7 +16,7 @@ export type ActionType = {
     handler: (id: string) => Promise<void>
 }
  
-@RWSView('rws-table')
+@RWSView('rws-table', { debugPackaging: false })
 class RWSTable extends RWSViewComponent {     
     @attr emptyLabel: string = 'No records'; 
     @observable columns: IFlexTableColumn[] = [];
@@ -27,13 +27,31 @@ class RWSTable extends RWSViewComponent {
 
     @observable actions: ActionType[] = [];
 
+    @observable actionFilter: (action: ActionType, row: any) => boolean = (action: ActionType, row: any) => true;
+
     @observable extraFormatters: {[header_key: string] : IExtraColumnFormatter} = {};    
     @observable headerTranslations: { [sourceKey: string]: string } = {};
 
+    private static readonly displayManager: DisplayManager = new DisplayManager(RWSTable);
+
+    static display(): DisplayManager
+    {
+        return this.displayManager;
+    }
+
     connectedCallback(): void {
         super.connectedCallback();
+        if(!this.fields || !this.fields.length){
+            this.fields = this.columns.map(col => col.key);
+        }
+
+        console.debug('RWSTable connectedCallback', this.fields, this.columns);
 
         this.orderFields();
+    }
+
+    displayClass(key: string): string{
+        return (this.constructor as typeof RWSTable).display().getClass(key);
     }
 
     headerTranslationsChanged(oldValue: { [sourceKey: string]: string }, newValue: { [sourceKey: string]: string })
@@ -53,7 +71,7 @@ class RWSTable extends RWSViewComponent {
 
     orderFields(): void
     {
-        if(this.columns  && this.fields && this.fields.length && this.columns.length){            
+        if(this.columns && this.columns.length){            
             const orderedColumns: IFlexTableColumn[] = [];            
 
             for(const fieldKey of this.fields){
@@ -73,8 +91,26 @@ class RWSTable extends RWSViewComponent {
             }                        
 
             this.dataColumns = orderedColumns;            
-        }else{
-            this.dataColumns = this.columns;
+        }
+    }
+
+    handleTableRefresh(event: CustomEvent): void {
+        this.$emit('table-refresh', event.detail);
+    }
+
+    handleTableExport(event: CustomEvent): void {
+        this.$emit('table-export', { 
+            ...event.detail,
+            data: this.data,
+            columns: this.dataColumns 
+        });
+    }
+
+    handleColumnVisibilityChanged(event: CustomEvent): void {
+        const { visibleColumns } = event.detail;
+        if (visibleColumns && Array.isArray(visibleColumns)) {
+            this.fields = visibleColumns;
+            this.$emit('column-visibility-changed', event.detail);
         }
     }
 }

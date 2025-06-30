@@ -1,0 +1,141 @@
+:host {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.table-controls {
+  .controls-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    margin-bottom: 0.5rem;
+
+    .quick-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .btn {
+        white-space: nowrap;
+        
+        i {
+          margin-right: 0.25rem;
+        }
+      }
+    }
+
+    .table-settings-dropdown,
+    .actions-dropdown {
+      position: relative;
+
+      .dropdown-menu {
+        min-width: 200px;
+        padding: 0.5rem 0;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        
+        .dropdown-header {
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: #6c757d;
+          margin-bottom: 0;
+        }
+
+        .dropdown-item {
+          display: block;
+          width: 100%;
+          padding: 0.5rem 1rem;
+          clear: both;
+          font-weight: 400;
+          color: #212529;
+          text-align: inherit;
+          text-decoration: none;
+          white-space: nowrap;
+          background-color: transparent;
+          border: 0;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #f8f9fa;
+          }
+
+          .form-check {
+            margin-bottom: 0;
+            
+            .form-check-input {
+              margin-top: 0.125rem;
+            }
+
+            .form-check-label {
+              font-size: 0.875rem;
+              cursor: pointer;
+            }
+          }
+        }
+
+        .dropdown-divider {
+          height: 0;
+          margin: 0.5rem 0;
+          overflow: hidden;
+          border-top: 1px solid #dee2e6;
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .table-controls {
+    .controls-wrapper {
+      flex-direction: column;
+      gap: 0.75rem;
+
+      .quick-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+// Dark theme support (if needed)
+@media (prefers-color-scheme: dark) {
+  .table-controls {
+    .controls-wrapper {
+      background-color: #343a40;
+      border-color: #495057;
+      color: #fff;
+    }
+
+    .dropdown-menu {
+      background-color: #343a40;
+      border-color: #495057;
+      color: #fff;
+
+      .dropdown-item {
+        color: #fff;
+
+        &:hover {
+          background-color: #495057;
+        }
+      }
+
+      .dropdown-header {
+        color: #adb5bd;
+      }
+
+      .dropdown-divider {
+        border-top-color: #495057;
+      }
+    }
+  }
+}

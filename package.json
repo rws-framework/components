@@ -1,7 +1,7 @@
 {
     "name": "@rws-framework/components",
     "private": false,
-    "version": "0.0.3",
+    "version": "0.0.4",
     "main": "src/index.ts",
     "scripts": {
         "docs": "typedoc --tsconfig ./tsconfig.json"
@@ -26,8 +26,7 @@
     },
     "homepage": "https://github.com/rws-framework/components#readme",
     "dependencies": {
-        "@rws-framework/client": "*",
-        "@shoelace-style/shoelace": "^2.19.1"
+        "@rws-framework/client": "*"        
     },
     "devDependencies": {
         "ts-node": "^10.9.1",

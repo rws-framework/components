@@ -1,0 +1,82 @@
+<div class="table-controls">
+  <div class="controls-wrapper">
+    
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      ${T.repeat(x => x.actions.filter(a => a.key !== 'settings'), T.html`
+        <button 
+          @click="${(action, ctx) => action.action()}"
+          class="btn btn-sm btn-${action => action.variant} mr-2"
+          title="${action => action.label}">
+          ${T.when(action => action.icon, T.html`<i class="${action => action.icon}"></i>`)}
+          ${action => action.label}
+        </button>
+      `)}
+    </div>
+
+    <!-- Table Settings Dropdown -->
+    ${T.when(x => x.showColumnToggle && x.availableColumns.length > 0, T.html`
+      <div class="table-settings-dropdown position-relative">
+        <button 
+          @click="${x => x.toggleColumnsDropdown()}"
+          class="btn btn-sm btn-secondary dropdown-toggle"
+          type="button">
+          <i class="simple-icon-settings"></i>
+          Columns
+        </button>
+        
+        ${T.when(x => x.showColumnsDropdown, T.html`
+          <div class="dropdown-menu show position-absolute" style="right: 0; top: 100%; z-index: 1050;">
+            <h6 class="dropdown-header">Show/Hide Columns</h6>
+            ${T.repeat(x => x.availableColumns, T.html`
+              <div class="dropdown-item">
+                <div class="form-check">
+                  <input 
+                    type="checkbox" 
+                    class="form-check-input"
+                    ?checked="${(column, ctx) => ctx.parent.isColumnVisible(column.key)}"
+                    @change="${(column, ctx) => ctx.parent.toggleColumn(column.key)}"
+                    id="col-${column => column.key}">
+                  <label class="form-check-label" for="col-${column => column.key}">
+                    ${column => column.header}
+                  </label>
+                </div>
+              </div>
+            `)}
+            <div class="dropdown-divider"></div>
+            <button 
+              @click="${x => x.closeDropdowns()}"
+              class="dropdown-item">
+              Close
+            </button>
+          </div>
+        `)}
+      </div>
+    `)}
+
+    <!-- Actions Dropdown (for more actions) -->
+    ${T.when(x => x.actions.length > 3, T.html`
+      <div class="actions-dropdown position-relative">
+        <button 
+          @click="${x => x.toggleActionsDropdown()}"
+          class="btn btn-sm btn-outline-secondary dropdown-toggle ml-2"
+          type="button">
+          More Actions
+        </button>
+        
+        ${T.when(x => x.showActionsDropdown, T.html`
+          <div class="dropdown-menu show position-absolute" style="right: 0; top: 100%; z-index: 1050;">
+            ${T.repeat(x => x.actions.filter(a => a.key === 'settings' || x.actions.indexOf(a) >= 3), T.html`
+              <button 
+                @click="${(action, ctx) => { action.action(); ctx.parent.closeDropdowns(); }}"
+                class="dropdown-item">
+                ${T.when(action => action.icon, T.html`<i class="${action => action.icon} mr-2"></i>`)}
+                ${action => action.label}
+              </button>
+            `)}
+          </div>
+        `)}
+      </div>
+    `)}
+  </div>
+</div>

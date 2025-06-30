@@ -1,27 +1,47 @@
-<div class="flex-table">
-  <div class="flex-table-row table-header">
-    ${T.repeat(x => x.dataColumns, T.html`<div class="flex-table-cell">${x => x.header}</div>`)}
-    ${T.when(x => x.actions.length, T.html`<div class="flex-table-cell" data-field="_actions">Actions</div>`)}
-  </div>
+<div>
+  <table-controls
+    :availableColumns="${x => x.columns}"
+    :visibleColumns="${x => x.fields || []}"
+    :data="${x => x.data}"
+    @table-refresh="${(x, c) => x.handleTableRefresh(c.event)}"
+    @table-export="${(x, c) => x.handleTableExport(c.event)}"
+    @column-visibility-changed="${(x, c) => x.handleColumnVisibilityChanged(c.event)}">
+  </table-controls>
   
-  ${T.repeat((x, dataContext) => x.data,  T.html`<div class="flex-table-row table-body">
-          ${T.repeat((x, columnContext) => columnContext.parent.dataColumns, T.html`<div class="flex-table-cell" data-field="${x => x.key}">
-                  ${(column, ctx) => {                                            
-                      const value = ctx.parent[column.key];                                                    
-                      return column.formatter ? column.formatter(value) : value;
-                  }}                    
-              </div>
+  <table class="${x => x.displayClass('table')}">
+    <thead class="${x => x.displayClass('thead')}">
+      <tr class="${x => x.displayClass('tr')}">
+        ${T.repeat(x => x.dataColumns, T.html`<th class="${(x, c) => c.parent.displayClass('th')}">${x => x.header}</th>`) }
+        
+        <th class="${x => x.displayClass('actionsTh')}" style="display: ${x => x.actions.length ? 'table-cell' : 'none'}">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="${x => x.displayClass('tbody')}">
+      ${T.repeat((x, dataContext) => x.data, T.html`
+      <tr class="${(x, c) => c.parent.displayClass('tr')}">
+        ${T.repeat((x, columnContext) => columnContext.parent.dataColumns, T.html`
+        <td class="${(x, c) => c.parentContext.parent.displayClass('td')}" data-field="${x => x.key}">
+          <slot name="cell-${x => x.key}" data-row="${(column, ctx) => ctx.parent.id}">
+            <span :innerHTML="${(column, ctx) => {
+              const value = ctx.parent[column.key];
+              return column.formatter ? column.formatter(value) : value;
+            }}"></span>
+          </slot>
+        </td>`)}
+        <td class="${(x, c) => c.parent.displayClass('actionsTd')}" style="display: ${(x, c) => c.parent.actions.length ? 'table-cell' : 'none'}">
+          ${T.repeat(
+          (x, c) => c.parent.actions.filter(a => c.parent.actionFilter(a, x)),
+          T.html`
+          <button @click="${(x, c) => x.handler(c.parent.parent.id)}"
+            class="${(x, c) => `${c.parentContext.parent.displayClass('button')} btn-${x.variant || 'primary'} ${(c.index === 0 ? '' : 'mr-1')}`}">
+            ${x => x.label}
+          </button>
           `)}
-          ${T.when((x,c) => c.parent.actions && c.parent.actions.length, T.html`<div class="flex-table-cell" data-field="_actions">
-            ${T.repeat((x, c) => c.parent.actions, T.html`
-              <sl-button @click="${ (x, c) => x.handler(c.parent.id) }" variant="${x => x.variant}" >${x => x.label}</sl-button>  
-            `)}                
-          </div>`)}
-      </div>
-  `)}
+        </td>
+      </tr>`)}
+    </tbody>
+  </table>
 
-  ${T.when(x => !x.data.length, T.html`<div class="flex-table-row flex-table-empty table-body">
-    <div class="flex-table-cell full-row"><strong>${ x => x.emptyLabel }</strong></div>
-  </div>`)}
-  
+  ${T.when(x => !x.data.length, T.html`<div class="${x => x.displayClass('alert')}"><strong>${x =>
+      x.emptyLabel}</strong></div>`)}
 </div>
