@@ -5,7 +5,7 @@ import { TableControlsEvents } from '../table-controls/events';
 export interface IFlexTableColumn {
     key: string;
     header: string;
-    formatter?: (value: any) => string;
+    formatter?: (value: any, item: any) => string;
 }
 
 export type IExtraColumnFormatter<T = unknown> = (inputType: T) => string;
@@ -87,7 +87,7 @@ export class RWSTable extends RWSViewComponent {
                 const value = item[col.key];
                 if (col.formatter && typeof col.formatter === 'function') {
                     // Strip HTML tags from formatted content for CSV
-                    const formatted = col.formatter(value);
+                    const formatted = col.formatter(value, item);
                     return `"${formatted.replace(/<[^>]*>/g, '').replace(/"/g, '""')}"`;
                 }
                 return `"${(value || '').toString().replace(/"/g, '""')}"`;
