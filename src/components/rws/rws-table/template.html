@@ -25,7 +25,7 @@
             <slot name="cell-${x => x.key}" data-row="${(column, ctx) => ctx.parent.id}">
               <span :innerHTML="${(column, ctx) => {
                 const value = ctx.parent[column.key];
-                return column.formatter ? column.formatter(value) : value;
+                return column.formatter ? column.formatter(value, ctx.parent) : value;
               }}"></span>
             </slot>
           </td>`)}
