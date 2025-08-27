@@ -15,6 +15,7 @@ export type ActionType = {
     label: string,
     variant: string,
     icon?: string,
+    filter?: (row: any) => boolean,
     handler: (id: string) => Promise<void>
 }
 
@@ -60,6 +61,12 @@ export class RWSTable extends RWSViewComponent {
         });
 
         this.orderFields();        
+    }
+
+    dataChanged(){
+        if(this.data.length){
+            this.$emit('rwstable.data.loaded', this.data);
+        }
     }
 
     displayClass(key: string): string {

@@ -32,12 +32,12 @@
           <td class="${(x, c) => c.parent.displayClass('actionsTd')}${(x, c) => c.parent.actions.length ? '' : ' hidden'}">
             ${T.repeat(
             (x, c) => c.parent.actions.filter(a => c.parent.actionFilter(a, x)),
-            T.html`            
-            <button @click="${(x, c) => x.handler(c.parent.id)}"
+            T.html`         
+            ${when((x, c) => x.filter === undefined || (x.filter !== undefined && x.filter(c.parent)), html`<button @click="${(x, c) => x.handler(c.parent.id)}"
               class="${(x, c) => `${c.parentContext.parent.displayClass('button')} btn-${x.variant || 'primary'} ${(c.index === 0 ? '' : 'mr-1')}`}">
               ${when(x => x.icon, html`<i class="${(x, c) => x.icon}"></i>`)}
               ${x => x.label}
-            </button>
+            </button>`)}
             `)}
           </td>
         </tr>`)}
