@@ -1,8 +1,8 @@
 <div class="rws-modal">
-    <div @click="${ (x, c) => x.closeModal() }" class="backdrop"></div>
+    <div @click="${ (x, c) => x.close() }" class="backdrop"></div>
     <div class="rws-modal-wrapper${x => x.centerTop === 'true' ? ' center-top' : ''}${x => x.centerLeft === 'true' ? ' center-left' : ''}">
       <div class="rws-modal-header">
-        <button class="btn btn-danger" @click="${ (x, c) => x.closeModal() }" variant="secondary" >Close</button>  
+        ${when(x => x.showCloseBtn, html`<button class="btn btn-danger" @click="${ (x, c) => x.close() }" variant="secondary" >Close</button>`)}  
       </div>
       <div class="rws-modal-body">
         <slot></slot>
