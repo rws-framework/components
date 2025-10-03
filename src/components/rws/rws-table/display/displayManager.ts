@@ -3,7 +3,7 @@ import type { IDisplayClasses } from "./display.types";
 
 export class DisplayManager {
     private static readonly classes: IDisplayClasses = {
-        table: ["table", "table-bordered"],
+        table: ["table", "table-bordered", "responsive"],
         thead: ["thead-light"],
         tbody: [],
         tr: [],

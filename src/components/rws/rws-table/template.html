@@ -1,49 +1,48 @@
 <div class="card">
   <div class="card-body">
-    <table-controls
-      :columnsLabel="${x => x.columnsLabel}"
-      :columnsIcon="${x => x.columnsIcon}"  
-      :exportLabel="${x => x.exportLabel}"
-      :exportIcon="${x => x.exportIcon}"
-      :availableColumns="${x => x.columns}"
-      :visibleColumns="${x => x.fields || []}"
-      :data="${x => x.data}"       
+    <table-controls :columnsLabel="${x => x.columnsLabel}" :columnsIcon="${x => x.columnsIcon}"
+      :exportLabel="${x => x.exportLabel}" :exportIcon="${x => x.exportIcon}" :availableColumns="${x => x.columns}"
+      :visibleColumns="${x => x.fields || []}" :data="${x => x.data}"
       @column-visibility-changed="${(x, c) => x.handleColumnVisibilityChanged(c.event)}">
-    </table-controls>    
-    <table class="${x => x.displayClass('table')}">
-      <thead class="${x => x.displayClass('thead')}">
-        <tr class="${x => x.displayClass('tr')}">
-          ${T.repeat(x => x.dataColumns, T.html`<th class="${(x, c) => c.parent.displayClass('th')}">${x => x.header}</th>`) }
-          <th class="${x => x.displayClass('actionsTh')}${(x, c) => x.actions.length ? '' : ' hidden'}">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="${x => x.displayClass('tbody')}">
-        ${T.repeat((x, dataContext) => x.data, T.html`
-        <tr class="${(x, c) => c.parent.displayClass('tr')}">
-          ${T.repeat((x, columnContext) => columnContext.parent.dataColumns, T.html`
-          <td class="${(x, c) => c.parentContext.parent.displayClass('td')}" data-field="${x => x.key}">
-            <slot name="cell-${x => x.key}" data-row="${(column, ctx) => ctx.parent.id}">
-              <span :innerHTML="${(column, ctx) => {
+    </table-controls>
+    <div class="table-responsive">
+      <table class="${x => x.displayClass('table')}">
+        <thead class="${x => x.displayClass('thead')}">
+          <tr class="${x => x.displayClass('tr')}">
+            ${T.repeat(x => x.dataColumns, T.html`<th class="${(x, c) => c.parent.displayClass('th')}">${x => x.header}
+            </th>`) }
+            <th class="${x => x.displayClass('actionsTh')}${(x, c) => x.actions.length ? '' : ' hidden'}">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="${x => x.displayClass('tbody')}">
+          ${T.repeat((x, dataContext) => x.data, T.html`
+          <tr class="${(x, c) => c.parent.displayClass('tr')}">
+            ${T.repeat((x, columnContext) => columnContext.parent.dataColumns, T.html`
+            <td class="${(x, c) => c.parentContext.parent.displayClass('td')}" data-field="${x => x.key}">
+              <slot name="cell-${x => x.key}" data-row="${(column, ctx) => ctx.parent.id}">
+                <span :innerHTML="${(column, ctx) => {
                 const value = ctx.parent[column.key];
-                return column.formatter ? column.formatter(value, ctx.parent) : value;
+                return column.formatter ? column.formatter(value, ctx.parent) : (value ? value : '-');
               }}"></span>
-            </slot>
-          </td>`)}
-          <td class="${(x, c) => c.parent.displayClass('actionsTd')}${(x, c) => c.parent.actions.length ? '' : ' hidden'}">
-            ${T.repeat(
-            (x, c) => c.parent.actions.filter(a => c.parent.actionFilter(a, x)),
-            T.html`         
-            ${when((x, c) => x.filter === undefined || (x.filter !== undefined && x.filter(c.parent)), html`<button @click="${(x, c) => x.handler(c.parent.id)}"
-              class="${(x, c) => `${c.parentContext.parent.displayClass('button')} btn-${x.variant || 'primary'} ${(c.index === 0 ? '' : 'mr-1')}`}">
-              ${when(x => x.icon, html`<i class="${(x, c) => x.icon}"></i>`)}
-              ${x => x.label}
-            </button>`)}
-            `)}
-          </td>
-        </tr>`)}
-      </tbody>
-    </table>
-
+              </slot>
+            </td>`)}
+            <td
+              class="${(x, c) => c.parent.displayClass('actionsTd')}${(x, c) => c.parent.actions.length ? '' : ' hidden'}">
+              ${T.repeat(
+              (x, c) => c.parent.actions.filter(a => c.parent.actionFilter(a, x)),
+              T.html`
+              ${when((x, c) => x.filter === undefined || (x.filter !== undefined && x.filter(c.parent)), html`<button
+                @click="${(x, c) => x.handler(c.parent.id)}"
+                class="${(x, c) => `${c.parentContext.parent.displayClass('button')} btn-${x.variant || 'primary'} ${(c.index === 0 ? '' : 'mr-1')}`}">
+                ${when(x => x.icon, html`<i class="${(x, c) => x.icon}"></i>`)}
+                ${x => x.label}
+              </button>`)}
+              `)}
+            </td>
+          </tr>`)}
+        </tbody>
+      </table>
+    </div>
     ${T.when(x => !x.data.length, T.html`<div class="${x => x.displayClass('alert')}"><strong>${x =>
         x.emptyLabel}</strong></div>`)}
   </div>
