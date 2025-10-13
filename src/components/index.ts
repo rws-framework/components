@@ -7,6 +7,7 @@ import { ActionType, IFlexTableColumn, RWSTable } from './rws/rws-table/componen
 import { RWSModal } from './rws/rws-modal/component';
 import { LineSplitter } from './rws/line-splitter/component';
 import { TableControls } from './rws/table-controls/component';
+import { RWSTooltip } from './rws/tooltip/component';
 
 
 function declareRWSComponents(parted: boolean = false): void {
@@ -17,6 +18,7 @@ function declareRWSComponents(parted: boolean = false): void {
         RWSTable;
         RWSModal;
         LineSplitter;
+        RWSTooltip;
 
         TableControls;
         RWSApiResource;
@@ -31,6 +33,7 @@ export {
     RWSTable,
     RWSModal,
     LineSplitter,
+    RWSTooltip,
     TableControls,
 
     RWSApiResource,

@@ -1,0 +1,8 @@
+<div class="tooltip-wrapper">
+    <div class="tooltip-trigger">
+        <slot></slot>
+    </div>
+    <div class="tooltip-bubble tooltip-${x => x.side}" role="tooltip">
+        ${x => x.text}
+    </div>
+</div>
