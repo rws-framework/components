@@ -36,6 +36,7 @@
     visibility: hidden;
     transition: opacity var(--tooltip-transition-duration), visibility var(--tooltip-transition-duration);
     pointer-events: none;
+    z-index: 10000;
 
     // Tippy arrow base styles
     &::before {

@@ -18,7 +18,7 @@ class RWSTooltip extends RWSViewComponent {
     static addTooltips(this: RWSViewComponent){
         const tooltipHolders = this.$(`[data-${RWSTooltip.DATA_TAGS.tooltip}]`) as NodeListOf<HTMLElement>;
 
-        for(const holder of tooltipHolders) {
+        for(const holder of Array.from(tooltipHolders)) {
             const side = holder.getAttribute(`data-${RWSTooltip.DATA_TAGS.side}`) || 'top';
 
             const tooltip = document.createElement('rws-tooltip');
