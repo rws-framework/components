@@ -78,5 +78,9 @@ th.hidden, td.hidden {
 td {
   &.action-cell{
     text-align: center;
+    
+    button {
+      margin-bottom: 10px;
+    }
   }
 }

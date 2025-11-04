@@ -36,13 +36,14 @@
     padding: var(--tooltip-padding);
     border-radius: var(--tooltip-border-radius);
     font-size: var(--tooltip-font-size);
-    white-space: nowrap;
+    white-space: pre-wrap;
     z-index: var(--tooltip-z-index);
-    opacity: 0;
-    visibility: hidden;
+    display: none;
     transition: opacity var(--tooltip-transition-duration), visibility var(--tooltip-transition-duration);
     pointer-events: none;
     z-index: 10000;
+    max-width: 250px;
+    width: max-content;
 
     // Tippy arrow base styles
     &::before {
@@ -116,13 +117,11 @@
 
 // Show tooltip on hover
 .tooltip-wrapper:hover .tooltip-bubble {
-    opacity: 1;
-    visibility: visible;
+    display: block;
 }
 
 // Focus support for accessibility
 .tooltip-trigger:focus-within + .tooltip-bubble,
 .tooltip-trigger:focus + .tooltip-bubble {
-    opacity: 1;
-    visibility: visible;
+    display: block;
 }

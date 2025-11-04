@@ -15,6 +15,8 @@ export type ActionType = {
     label: string,
     variant: string,
     icon?: string,
+    tooltip?: string,
+    tooltipDirection?: 'top' | 'bottom' | 'left' | 'right',
     filter?: (row: any) => boolean,
     handler: (id: string) => Promise<void>
 }
