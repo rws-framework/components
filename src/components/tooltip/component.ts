@@ -4,6 +4,7 @@ import { RWSViewComponent, RWSView } from '@rws-framework/client';
 @RWSView('rws-tooltip')
 class RWSTooltip extends RWSViewComponent {
     @attr side: string = 'top';
+    @attr({ mode: 'boolean' }) disabled: boolean = false;
     @attr text: string = '';
 
     static DATA_TAGS = {

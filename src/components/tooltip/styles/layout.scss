@@ -17,6 +17,12 @@
 .tooltip-wrapper {
     position: relative;
     display: inline-block;
+
+    &.disabled{
+        .tooltip-bubble {
+            display: none !important;
+        }
+    }
 }
 
 .tooltip-trigger {
