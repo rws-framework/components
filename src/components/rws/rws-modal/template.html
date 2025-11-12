@@ -2,6 +2,7 @@
     <div @click="${ (x, c) => x.close() }" class="backdrop"></div>
     <div class="rws-modal-wrapper${x => x.centerTop === 'true' ? ' center-top' : ''}${x => x.centerLeft === 'true' ? ' center-left' : ''}">
       <div class="rws-modal-header">
+        ${when(x => x.header, html`<h2 class="modal-title">${x => x.header?.t()}</h2>`)}
         ${when(x => x.showCloseBtn, html`<button class="btn btn-danger" @click="${ (x, c) => x.close() }" variant="secondary" >Close</button>`)}  
       </div>
       <div class="rws-modal-body">

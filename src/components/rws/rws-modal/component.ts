@@ -11,9 +11,21 @@ class RWSModal extends RWSViewComponent {
 
     @attr name?: string;
 
+    @attr header?: string;
+
+    private handleEscKey = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+            this.close();
+        }
+    };
+
     connectedCallback(): void {
         super.connectedCallback(); 
         this.shadowRoot.ownerDocument.querySelector('body').classList.add('has-backdrop');
+        
+        // Add ESC key listener
+        document.addEventListener('keydown', this.handleEscKey);
+        
         const ev = new CustomEvent(`rws_modal${this.name ? (':' + this.name) : ''}:open`, {
             detail: true,
             bubbles: true,
@@ -46,6 +58,10 @@ class RWSModal extends RWSViewComponent {
 
     disconnectedCallback(): void {
         this.shadowRoot.ownerDocument.querySelector('body').classList.remove('has-backdrop');
+        
+        // Remove ESC key listener
+        document.removeEventListener('keydown', this.handleEscKey);
+        
         super.disconnectedCallback();
     }
 

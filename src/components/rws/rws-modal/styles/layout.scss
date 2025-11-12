@@ -56,11 +56,29 @@
         }
 
         .rws-modal-header{
+            position: sticky;
+            top: 0;
+            background: #ffffff;
+            z-index: 10;
             display: flex;
-    
-            justify-content: end;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+
+            .modal-title {
+                margin: 0;
+                font-size: 24px;
+                font-weight: 600;
+                color: #1e293b;
+                flex: 1;
+            }
         }
     
-        .rws-modal-body{}
+        .rws-modal-body{
+            /* Modal body content */
+            position: relative;
+        }
     }   
 }
