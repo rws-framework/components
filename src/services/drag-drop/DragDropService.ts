@@ -1,7 +1,6 @@
 import { RWSInject, RWSService, RWSViewComponent } from '@rws-framework/client';
 import { DragData, DropZone, IDragOpts } from './types';
-import { Tab } from '../../types/tab.types';
-import TabReaderService, { TabReaderServiceInstance } from '../TabReaderService';
+
 import { EventManager } from './EventManager';
 import { HandlerManager } from './HandlerManager';
 
@@ -10,12 +9,6 @@ class DragDropService extends RWSService {
     private dropZones: Map<HTMLElement, DropZone<any>> = new Map();
     private handlerManager: HandlerManager = new HandlerManager();
     private successfulDrop: boolean = false;
-
-    constructor(
-        @TabReaderService private tabReader: TabReaderServiceInstance
-    ){        
-        super();
-    }
 
     /**
      * Initialize drag functionality for an element
@@ -26,7 +19,11 @@ class DragDropService extends RWSService {
         draggedElement.draggable = true;
         
         const dragStartHandler = (event: DragEvent) => {
-            const data = this.tabReader.getTabDomData(draggedElement) as T;            
+            if(!dragOptions.getDragElementData){
+                throw new Error('DragDropService.drag: getDragElementData function must be provided in dragOptions');
+            }
+
+            const data = dragOptions.getDragElementData(draggedElement).data as T;     
             const type = dragOptions.dragElementType || 'tab';
 
             // Reset successful drop flag for new drag operation

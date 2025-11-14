@@ -38,6 +38,7 @@ export interface DropEventDetail<T> {
 export type DropOutCallback = <T>(dragData: DragData<T>) => Promise<void> | void;
 
 export interface IDragOpts {
+    getDragElementData: (element: HTMLElement) => DragData<any>;
     dragElementType: string;
     onDropOut?: DropOutCallback;
 }
