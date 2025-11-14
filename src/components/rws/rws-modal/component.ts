@@ -7,6 +7,7 @@ class RWSModal extends RWSViewComponent {
 
     @attr centerTop: 'true' | 'false' = 'true';
     @attr centerLeft: 'true' | 'false' = 'true';
+    @attr maxWidth: string = '70vw';
     @attr({attribute: 'showCloseBtn', mode: 'boolean'}) showCloseBtn: boolean = true;
 
     @attr name?: string;

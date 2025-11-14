@@ -4,13 +4,20 @@ export interface DragData<T> {
     element: HTMLElement;
     data: T;
     type: string;
-    onDropOut?: DropOutCallback
+    onDropOut?: DropOutCallback;
+    sortingOrder?: number;
+    originalPosition?: number;
+    originalOrder?: number;
+    allItemsOrder?: Array<{id: string, order: number}>;
+    intendedAfterElement?: HTMLElement | null;
+    lastDropY?: number;
 }
 
 export interface DropZone<T> {
     element: HTMLElement;
     accepts: string[];
-    onDrop?: (dragData: DragData<T>, dropZone: DropZone<T>) => void;
+    onDrop?: (dragData: DragData<T>, dropZone: DropZone<T>, event?: DragEvent) => void;
+    sortable?: boolean;
 }
 export interface DragHandlers {
     dragStart: (event: DragEvent) => void;
@@ -41,4 +48,10 @@ export interface IDragOpts {
     getDragElementData: (element: HTMLElement) => DragData<any>;
     dragElementType: string;
     onDropOut?: DropOutCallback;
+    sortable?: boolean;
+}
+
+export interface SortableDropZoneOptions<T> {
+    sortable: boolean;
+    calculateSortingOrder?: (dragData: DragData<T>, dropEvent: DragEvent, container: HTMLElement) => number;
 }
