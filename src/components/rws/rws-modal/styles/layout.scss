@@ -22,7 +22,7 @@
     .rws-modal-wrapper{
         background: #FFF;
         border-radius: 20px;
-        padding: 20px;
+        padding: 0 20px 20px 20px;
         max-width: var(--modal-max-width, 70vw);
         max-height: 80vh;
         min-height: 40vh;
@@ -57,7 +57,7 @@
 
         .rws-modal-header{
             position: sticky;
-            top: 0;
+            top: 0px;
             background: #ffffff;
             z-index: 10;
             display: flex;
@@ -66,6 +66,7 @@
             margin-bottom: 15px;
             padding-bottom: 15px;
             border-bottom: 1px solid #e2e8f0;
+            padding-top: 15px;
 
             .modal-title {
                 margin: 0;
