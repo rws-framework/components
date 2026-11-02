@@ -14,6 +14,8 @@ class RWSModal extends RWSViewComponent {
 
     @attr header?: string;
 
+    @attr({mode: 'boolean'}) noborderHeader: boolean = false;
+
     private handleEscKey = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
             this.close();
